@@ -27,6 +27,12 @@ Then either:
 - add the repository `bin/` directory to `PATH`, or
 - symlink the three files into a directory already on `PATH`
 
+These three shell entrypoints are the supported public CLI surface:
+
+- `claude-poe`
+- `claude-poe-review`
+- `poe-external-review`
+
 Example:
 
 ```bash
@@ -44,6 +50,15 @@ CLAUDE_POE_DEFAULT_MODEL=claude-sonnet-4-6
 ```
 
 The wrappers and the packaged `poe-external-review` entrypoint load this file automatically unless you override it with `CLAUDE_POE_ENV_FILE`.
+
+## Configuration Precedence
+
+Runtime configuration resolves in this order:
+
+1. environment variables already exported in the current shell
+2. `CLAUDE_POE_ENV_FILE`, if set
+3. the default file `~/.config/claude-poe.env`
+4. code-level defaults such as `claude-sonnet-4-6`
 
 You can start from:
 
@@ -75,5 +90,13 @@ Edit the copied file as needed.
 claude-poe --wrapper-help
 claude-poe models
 claude-poe-review --wrapper-help
+poe-external-review --help
+```
+
+## Advanced Checks
+
+If you want to validate direct Poe model alias routing after credentials are configured:
+
+```bash
 python3 scripts/check_model_aliases.py
 ```

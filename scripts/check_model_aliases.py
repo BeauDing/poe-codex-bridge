@@ -19,9 +19,10 @@ except ModuleNotFoundError:
     raise
 
 
-DEFAULT_BASE_URL = "https://api.poe.com/v1"
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_MODEL_CONFIG = SKILL_DIR / "config" / "model_aliases.json"
+
+from runtime_env import get_poe_api_base_url, load_runtime_env
 
 
 def parse_args() -> argparse.Namespace:
@@ -49,13 +50,16 @@ def load_aliases(path: str) -> dict[str, str]:
 
 def main() -> int:
     args = parse_args()
+    env_path = load_runtime_env()
     api_key = os.getenv("POE_API_KEY")
     if not api_key:
         print("POE_API_KEY is not set.", file=sys.stderr)
+        if env_path is not None:
+            print(f"Checked runtime env file: {env_path}", file=sys.stderr)
         return 1
 
     aliases = load_aliases(args.model_config)
-    client = OpenAI(api_key=api_key, base_url=DEFAULT_BASE_URL)
+    client = OpenAI(api_key=api_key, base_url=get_poe_api_base_url())
     models = client.models.list()
     available = {item.id for item in models.data}
 

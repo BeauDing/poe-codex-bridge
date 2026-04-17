@@ -21,10 +21,10 @@
 - verify installation steps match the current file layout
 - verify the main claim is still `Claude Code via Poe`
 - verify non-Claude review is still described as packaged-context review
+- verify `claude-poe models` is documented as a known-good local list rather than a live Poe catalog
 
 ## Optional Before First Public Push
 
 - add a short changelog or release notes
 - add GitHub issue templates if the repo will be actively maintained
 - decide whether a `CONTRIBUTING.md` file is worth adding
-

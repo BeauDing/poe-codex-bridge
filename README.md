@@ -29,6 +29,7 @@ Repository name note:
 
 - the repository is named `poe-codex-bridge`
 - the shipped CLI commands remain `claude-poe`, `claude-poe-review`, and `poe-external-review`
+- `claude-poe models` prints this wrapper's known-good model names, not Poe's live model catalog
 
 ## Quick Start
 
@@ -75,11 +76,21 @@ poe-external-review \
 ## Repository Layout
 
 - [`bin/`](bin): shell entrypoints
-- [`scripts/`](scripts): Python helpers for prompt building, sending requests, and alias checks
+- [`scripts/`](scripts): Python implementation helpers and advanced tooling
 - [`config/`](config): model alias examples
 - [`docs/`](docs): architecture, installation, capability matrix, limitations, and planning notes
 - [`examples/`](examples): sanitized usage examples
 - [`skill/`](skill): optional Codex skill packaging
+
+## Public Entry Points
+
+Use these commands as the public CLI surface:
+
+- `claude-poe`
+- `claude-poe-review`
+- `poe-external-review`
+
+Treat `scripts/*.py` as implementation-level tools unless you specifically need lower-level control.
 
 ## Scope
 

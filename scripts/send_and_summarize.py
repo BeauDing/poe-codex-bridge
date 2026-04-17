@@ -20,9 +20,9 @@ except ModuleNotFoundError:
     raise
 
 from build_review_prompt import build_prompt, read_optional
+from runtime_env import get_poe_api_base_url, load_runtime_env
 
 
-DEFAULT_BASE_URL = "https://api.poe.com/v1"
 SKILL_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_MODEL_CONFIG = SKILL_DIR / "config" / "model_aliases.json"
 EXAMPLE_MODEL_CONFIG = SKILL_DIR / "config" / "model_aliases.example.json"
@@ -238,9 +238,12 @@ def summarize_response(text: str, model: str, mode: str, preset: str | None, mod
 
 def main() -> int:
     args = parse_args()
+    env_path = load_runtime_env()
     api_key = os.getenv("POE_API_KEY")
     if not api_key:
         print("POE_API_KEY is not set.", file=sys.stderr)
+        if env_path is not None:
+            print(f"Checked runtime env file: {env_path}", file=sys.stderr)
         return 1
 
     prompt = build_prompt(
@@ -269,7 +272,7 @@ def main() -> int:
     if args.prompt_file:
         Path(args.prompt_file).write_text(prompt, encoding="utf-8")
 
-    client = OpenAI(api_key=api_key, base_url=DEFAULT_BASE_URL)
+    client = OpenAI(api_key=api_key, base_url=get_poe_api_base_url())
     text = create_text_response(
         client,
         model=resolved_model,

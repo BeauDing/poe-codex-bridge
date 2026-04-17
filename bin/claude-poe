@@ -13,30 +13,36 @@ tested_models=(
   "haiku"
 )
 
-default_model="${CLAUDE_POE_DEFAULT_MODEL:-claude-sonnet-4-6}"
-
 print_wrapper_help() {
+  local current_default_model="${CLAUDE_POE_DEFAULT_MODEL:-claude-sonnet-4-6}"
   cat <<EOF
 claude-poe: run Claude Code through Poe with isolated local config.
 
 Usage:
   claude-poe [claude args...]
   claude-poe models
+  claude-poe known-models
   claude-poe --wrapper-help
 
 Default model:
-  $default_model
+  $current_default_model
 
-Tested working models on this machine:
+Known-good model names for this wrapper:
 $(printf '  - %s\n' "${tested_models[@]}")
 
 Notes:
-  - If you do not pass --model, claude-poe injects: --model $default_model
+  - If you do not pass --model, claude-poe injects: --model $current_default_model
   - To override it, pass --model <name> explicitly.
+  - \`models\` prints this wrapper's known-good names, not Poe's live catalog.
 EOF
 }
 
-if [[ $# -eq 1 && ( "$1" == "models" || "$1" == "--list-models" ) ]]; then
+if [[ -f "$config_file" ]]; then
+  # shellcheck disable=SC1090
+  source "$config_file"
+fi
+
+if [[ $# -eq 1 && ( "$1" == "models" || "$1" == "known-models" || "$1" == "--list-models" ) ]]; then
   printf '%s\n' "${tested_models[@]}"
   exit 0
 fi
@@ -56,10 +62,7 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 127
 fi
 
-if [[ -f "$config_file" ]]; then
-  # shellcheck disable=SC1090
-  source "$config_file"
-fi
+default_model="${CLAUDE_POE_DEFAULT_MODEL:-claude-sonnet-4-6}"
 
 if [[ -z "${POE_API_KEY:-}" ]]; then
   echo "claude-poe: Poe API key is not configured." >&2
