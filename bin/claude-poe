@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+config_file="${CLAUDE_POE_ENV_FILE:-${HOME}/.config/claude-poe.env}"
+tested_models=(
+  "claude-sonnet-4-6"
+  "claude-haiku-4-5"
+  "claude-opus-4-6"
+  "claude-sonnet-4.6"
+  "claude-haiku-4.5"
+  "claude-opus-4.6"
+  "sonnet"
+  "haiku"
+)
+
+default_model="${CLAUDE_POE_DEFAULT_MODEL:-claude-sonnet-4-6}"
+
+print_wrapper_help() {
+  cat <<EOF
+claude-poe: run Claude Code through Poe with isolated local config.
+
+Usage:
+  claude-poe [claude args...]
+  claude-poe models
+  claude-poe --wrapper-help
+
+Default model:
+  $default_model
+
+Tested working models on this machine:
+$(printf '  - %s\n' "${tested_models[@]}")
+
+Notes:
+  - If you do not pass --model, claude-poe injects: --model $default_model
+  - To override it, pass --model <name> explicitly.
+EOF
+}
+
+if [[ $# -eq 1 && ( "$1" == "models" || "$1" == "--list-models" ) ]]; then
+  printf '%s\n' "${tested_models[@]}"
+  exit 0
+fi
+
+if [[ $# -eq 1 && "$1" == "--wrapper-help" ]]; then
+  print_wrapper_help
+  exit 0
+fi
+
+if ! command -v poe-code >/dev/null 2>&1; then
+  echo "claude-poe: poe-code is not installed or not on PATH." >&2
+  exit 127
+fi
+
+if ! command -v claude >/dev/null 2>&1; then
+  echo "claude-poe: claude is not installed or not on PATH." >&2
+  exit 127
+fi
+
+if [[ -f "$config_file" ]]; then
+  # shellcheck disable=SC1090
+  source "$config_file"
+fi
+
+if [[ -z "${POE_API_KEY:-}" ]]; then
+  echo "claude-poe: Poe API key is not configured." >&2
+  echo "Expected POE_API_KEY in: $config_file" >&2
+  exit 2
+fi
+
+export POE_API_KEY
+export POE_API_BASE_URL="${POE_API_BASE_URL:-https://api.poe.com/v1}"
+
+has_explicit_model=0
+for arg in "$@"; do
+  case "$arg" in
+    --model|--model=*)
+      has_explicit_model=1
+      break
+      ;;
+  esac
+done
+
+args=("$@")
+if [[ $has_explicit_model -eq 0 ]]; then
+  args=(--model "$default_model" "${args[@]}")
+fi
+
+exec poe-code wrap claude -- "${args[@]}"

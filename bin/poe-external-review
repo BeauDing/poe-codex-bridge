@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+script_path="$repo_root/scripts/send_and_summarize.py"
+config_file="${CLAUDE_POE_ENV_FILE:-${HOME}/.config/claude-poe.env}"
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "poe-external-review: python3 is not installed or not on PATH." >&2
+  exit 127
+fi
+
+if [[ ! -f "$script_path" ]]; then
+  echo "poe-external-review: missing helper script at $script_path" >&2
+  exit 2
+fi
+
+if [[ -f "$config_file" ]]; then
+  # shellcheck disable=SC1090
+  source "$config_file"
+fi
+
+if [[ -n "${POE_API_KEY:-}" ]]; then
+  export POE_API_KEY
+fi
+
+if [[ -n "${POE_API_BASE_URL:-}" ]]; then
+  export POE_API_BASE_URL
+fi
+
+exec python3 "$script_path" "$@"

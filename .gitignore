@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+build/
+.DS_Store
+
+config/model_aliases.json
+*.prompt.md
+*.raw.md
+*.summary.md
+
