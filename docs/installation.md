@@ -63,6 +63,7 @@ Runtime configuration resolves in this order:
 You can start from:
 
 ```bash
+mkdir -p ~/.config
 cp config/claude-poe.env.example ~/.config/claude-poe.env
 ```
 

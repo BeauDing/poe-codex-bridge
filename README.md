@@ -25,25 +25,37 @@ The auxiliary path is useful, but it is not full Claude Code parity.
 
 See [docs/capability-matrix.md](docs/capability-matrix.md) for the longer version.
 
-Repository name note:
-
-- the repository is named `poe-codex-bridge`
-- the shipped CLI commands remain `claude-poe`, `claude-poe-review`, and `poe-external-review`
-- `claude-poe models` prints this wrapper's known-good model names, not Poe's live model catalog
+The repository is named `poe-codex-bridge`, but the public CLI commands remain `claude-poe`, `claude-poe-review`, and `poe-external-review`.
+`claude-poe models` prints this wrapper's known-good model names, not Poe's live model catalog.
 
 ## Quick Start
 
-### 1. Install the wrappers
+### 1. Put the wrappers on your `PATH`
 
-Add [`bin/`](bin) to your `PATH`, or symlink the wrappers:
+Make the entrypoints executable, then add [`bin/`](bin) to your `PATH` or symlink the three files into a directory already on `PATH`:
 
 ```bash
 chmod +x bin/claude-poe bin/claude-poe-review bin/poe-external-review
+export PATH="/path/to/poe-codex-bridge/bin:$PATH"
 ```
 
-### 2. Configure Poe credentials
+If you want the packaged `poe-external-review` path, install the Python dependency too:
 
-Create `~/.config/claude-poe.env`:
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+### 2. Create the shared Poe config
+
+You can start from the example file:
+
+```bash
+mkdir -p ~/.config
+cp config/claude-poe.env.example ~/.config/claude-poe.env
+```
+
+The wrappers and the packaged `poe-external-review` path both read `~/.config/claude-poe.env` by default, unless you override it with `CLAUDE_POE_ENV_FILE`.
+The file should contain:
 
 ```bash
 POE_API_KEY=your_poe_api_key
@@ -51,11 +63,9 @@ POE_API_BASE_URL=https://api.poe.com/v1
 CLAUDE_POE_DEFAULT_MODEL=claude-sonnet-4-6
 ```
 
-The same env file is used by both the Claude-family workspace wrappers and the packaged `poe-external-review` path.
+### 3. Run one of the supported commands
 
-An example file is included at [`config/claude-poe.env.example`](config/claude-poe.env.example).
-
-### 3. Use the Claude-family workspace path
+For live Claude-family workspace access:
 
 ```bash
 claude-poe --wrapper-help
@@ -63,7 +73,7 @@ claude-poe -p "Summarize the key modules in this repository"
 claude-poe-review "Focus on auth and permissions"
 ```
 
-### 4. Use the packaged non-Claude review path
+For packaged non-Claude external review:
 
 ```bash
 poe-external-review \
@@ -73,6 +83,8 @@ poe-external-review \
   --evidence-notes evidence.md
 ```
 
+For the full installation flow, configuration precedence, alias routing, and smoke tests, see [docs/installation.md](docs/installation.md).
+
 ## Repository Layout
 
 - [`bin/`](bin): shell entrypoints
@@ -81,16 +93,6 @@ poe-external-review \
 - [`docs/`](docs): architecture, installation, capability matrix, limitations, and planning notes
 - [`examples/`](examples): sanitized usage examples
 - [`skill/`](skill): optional Codex skill packaging
-
-## Public Entry Points
-
-Use these commands as the public CLI surface:
-
-- `claude-poe`
-- `claude-poe-review`
-- `poe-external-review`
-
-Treat `scripts/*.py` as implementation-level tools unless you specifically need lower-level control.
 
 ## Scope
 

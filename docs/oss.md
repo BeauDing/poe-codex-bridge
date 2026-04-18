@@ -55,7 +55,7 @@ Do not publish the first public repository until the following conditions are sa
 
 ## Remaining Work
 
-- decide whether to add a `LICENSE` file and which license to use
+- confirm the current `LICENSE` still matches the intended public release
 - validate at least one `claude-poe-review` workspace case from the new repo
 - validate at least one Gemini packaged-review case from the new repo
 - clean any remaining machine-specific assumptions from helper scripts and docs
