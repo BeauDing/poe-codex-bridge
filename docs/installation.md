@@ -8,12 +8,6 @@ Repository file view:
 https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 ```
 
-Raw form for fetch-based agent flows:
-
-```text
-https://raw.githubusercontent.com/BeauDing/poe-codex-bridge/refs/heads/main/docs/installation.md
-```
-
 ## Prerequisites
 
 For the main Claude-family path:
