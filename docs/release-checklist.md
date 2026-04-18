@@ -26,7 +26,7 @@ claude-poe --model claude-haiku-4.5 -p "Reply with exactly: pong"
 poe-external-review \
   --model gemini-3-flash \
   --mode decision-cross-check \
-  --current-reply reply.md \
+  --current-reply examples/test-fixtures/reply.md \
   --language English \
   --max-output-tokens 1200
 ```

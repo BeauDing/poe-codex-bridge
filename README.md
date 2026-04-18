@@ -48,7 +48,7 @@ claude-poe-review "Focus on auth and permissions"
 poe-external-review \
   --model gemini-3-flash \
   --mode decision-cross-check \
-  --current-reply reply.md
+  --current-reply examples/test-fixtures/reply.md
 ```
 
 For full step-by-step setup, validation, and troubleshooting, see [docs/installation.md](docs/installation.md).
@@ -66,7 +66,3 @@ Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/b
 
 - [Installation](docs/installation.md)
 - [Architecture](docs/architecture.md)
-- [Capability Matrix](docs/capability-matrix.md)
-- [Limitations](docs/limitations.md)
-- [Release Checklist](docs/release-checklist.md)
-- [OSS Plan](docs/oss.md)
