@@ -16,6 +16,27 @@
 - run one real low-cost Claude-family request
 - run one real low-cost packaged non-Claude request
 
+Recommended low-cost smoke tests:
+
+```bash
+claude-poe --model claude-haiku-4.5 -p "Reply with exactly: pong"
+```
+
+```bash
+poe-external-review \
+  --model gemini-3-flash \
+  --mode decision-cross-check \
+  --current-reply reply.md \
+  --language English \
+  --max-output-tokens 1200
+```
+
+Notes:
+
+- prefer `claude-haiku-4.5` for the Claude-family smoke test unless a specific compatibility issue requires another model
+- prefer `gemini-3-flash` for the packaged non-Claude smoke test unless you are explicitly validating a different alias or model family
+- do not use higher-cost models for routine smoke tests
+
 ## Documentation Checks
 
 - verify installation steps match the current file layout
