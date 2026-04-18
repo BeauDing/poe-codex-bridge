@@ -52,11 +52,7 @@ poe-external-review \
 ```
 
 For full step-by-step setup, validation, and troubleshooting, see [docs/installation.md](docs/installation.md).
-If you are using Codex or another agent to install this repository, point it to [docs/installation.md](docs/installation.md) rather than relying on the abbreviated README flow.
-
-## Agent Install
-
-If you want an agent to perform the installation, give it this prompt:
+If you are using Codex or another agent to install this repository, point it to [docs/installation.md](docs/installation.md) rather than relying on the abbreviated README flow. A suitable prompt is:
 
 ```text
 Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
