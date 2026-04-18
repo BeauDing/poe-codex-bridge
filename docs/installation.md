@@ -2,6 +2,11 @@
 
 This document is the full setup reference for both manual installation and agent-assisted installation.
 If a Codex session or another agent is asked to install this repository, point it here.
+Raw form for agent fetch flows:
+
+```text
+https://raw.githubusercontent.com/BeauDing/poe-codex-bridge/refs/heads/main/docs/installation.md
+```
 
 ## Prerequisites
 
