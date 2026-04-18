@@ -4,12 +4,22 @@ description: Use Claude Code through Poe for Claude-family workspace access, or 
 ---
 # poe-codex-bridge
 
-Use this repository when the task calls for either:
+Use this skill when the task calls for either:
 
 - Claude-family review or coding work through Poe with live workspace access
 - a packaged second opinion through Poe on selected local files
 
-## Execution Paths
+## When To Use It
+
+Use the workspace path when the model should inspect the current repository directly.
+
+Use the packaged review path when:
+
+- the user explicitly wants Gemini or another non-Claude model
+- a packaged external critique is enough
+- live workspace access is not required
+
+## Paths
 
 ### Claude-family workspace path
 
@@ -18,18 +28,19 @@ Use:
 - `claude-poe`
 - `claude-poe-review`
 
-Choose this path when the model should inspect the current repository directly.
-
 ### Packaged external review path
 
 Use:
 
 - `poe-external-review`
-- `scripts/send_and_summarize.py`
-
-Choose this path when the user explicitly wants Gemini or another non-Claude model, or when a packaged external critique is enough.
 
 ## Core Rule
 
 Do not describe the packaged non-Claude path as having full Claude Code parity.
 It is a packaged review path, not a live workspace agent path.
+
+## Practical Guidance
+
+- prefer `claude-poe` as the general workspace entrypoint
+- prefer `claude-poe-review` when the task is specifically a read-only code review
+- prefer `poe-external-review` only when packaged review is acceptable or a non-Claude model is required
