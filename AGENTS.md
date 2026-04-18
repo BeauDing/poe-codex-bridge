@@ -7,7 +7,7 @@ When updating this repository:
 - if `HANDOFF.md` exists, read it first after `/clear` or at the start of a fresh continuation, and use it only when its scope clearly matches the current task
 - use `HANDOFF.md` as short-term task continuity, not as a replacement for `README.md` or this file
 - update `HANDOFF.md` only at explicit handoff points such as immediately before `/clear`, before stopping a long session, or when the user explicitly asks for a handoff summary
-- keep the core product boundary clear: `claude-poe` and `claude-poe-review` are the main path; `poe-external-review` is an auxiliary packaged-review path
+- keep the core product boundary clear: the workspace commands are the main path; the packaged review command is an auxiliary path
 - do not describe the non-Claude path as having full Claude Code parity, live workspace access, or drop-in backend equivalence
 - treat `bin/claude-poe`, `bin/claude-poe-review`, and `bin/poe-external-review` as the supported public CLI surface
 - treat `scripts/*.py` as implementation helpers unless the task explicitly needs lower-level control

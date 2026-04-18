@@ -1,6 +1,6 @@
 # Capability Matrix
 
-## Main Path: `claude-poe` / `claude-poe-review`
+## Main Path: workspace commands
 
 - Claude Code runtime: yes
 - Local workspace access: yes
@@ -9,7 +9,7 @@
 - Best for code review and repository analysis: yes
 - Best for Gemini or other non-Claude models: no
 
-## Auxiliary Path: `poe-external-review`
+## Auxiliary Path: packaged review command
 
 - Claude Code runtime: no
 - Local workspace access: no
@@ -42,4 +42,3 @@ This repository does not currently provide:
 
 - full Claude Code parity for non-Claude models
 - an Anthropic-compatible adapter that translates arbitrary Poe models into a stable Claude Code backend
-

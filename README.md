@@ -25,7 +25,7 @@ The auxiliary path is useful, but it is not full Claude Code parity.
 
 See [docs/capability-matrix.md](docs/capability-matrix.md) for the longer version.
 
-The repository is named `poe-codex-bridge`, but the public CLI commands remain `claude-poe`, `claude-poe-review`, and `poe-external-review`.
+The repository is named `poe-codex-bridge`, but the public CLI surface still consists of the workspace commands and the packaged review command.
 `claude-poe models` prints this wrapper's known-good model names, not Poe's live model catalog.
 
 ## Quick Start
