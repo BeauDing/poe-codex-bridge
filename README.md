@@ -22,11 +22,13 @@ The [`skill/`](skill) directory is optional skill-facing packaging, not the main
 
 ## Quick Start
 
-1. Put the wrappers on your `PATH`:
+For manual setup, the shortest path is:
 
 ```bash
 chmod +x bin/claude-poe bin/claude-poe-review bin/poe-external-review
 export PATH="/path/to/poe-codex-bridge/bin:$PATH"
+mkdir -p ~/.config
+cp config/claude-poe.env.example ~/.config/claude-poe.env
 ```
 
 If you plan to use the packaged review path, also install:
@@ -35,14 +37,7 @@ If you plan to use the packaged review path, also install:
 python3 -m pip install -r requirements.txt
 ```
 
-2. Create the shared Poe config:
-
-```bash
-mkdir -p ~/.config
-cp config/claude-poe.env.example ~/.config/claude-poe.env
-```
-
-3. Use one of the entrypoints:
+Then try one of the entrypoints:
 
 ```bash
 claude-poe --wrapper-help
@@ -55,6 +50,9 @@ poe-external-review \
   --mode decision-cross-check \
   --current-reply reply.md
 ```
+
+For full step-by-step setup, validation, and troubleshooting, see [docs/installation.md](docs/installation.md).
+If you are using Codex or another agent to install this repository, point it to [docs/installation.md](docs/installation.md) rather than relying on the abbreviated README flow.
 
 ## More Details
 

@@ -1,5 +1,8 @@
 # Installation
 
+This document is the full setup reference for both manual installation and agent-assisted installation.
+If a Codex session or another agent is asked to install this repository, point it here.
+
 ## Prerequisites
 
 For the main Claude-family path:
@@ -39,6 +42,8 @@ Example:
 export PATH="/path/to/poe-codex-bridge/bin:$PATH"
 ```
 
+At this point the basic workspace wrappers are on `PATH`.
+
 ## Credential Setup
 
 Create `~/.config/claude-poe.env`:
@@ -67,6 +72,8 @@ mkdir -p ~/.config
 cp config/claude-poe.env.example ~/.config/claude-poe.env
 ```
 
+If you only need the Claude-family workspace path, the setup can stop here.
+
 ## Python Dependency
 
 The packaged review helpers use the OpenAI SDK against Poe's OpenAI-compatible API:
@@ -74,6 +81,8 @@ The packaged review helpers use the OpenAI SDK against Poe's OpenAI-compatible A
 ```bash
 python3 -m pip install -r requirements.txt
 ```
+
+This is only required for the packaged `poe-external-review` path and the direct Poe API helpers.
 
 ## Optional Config
 
@@ -93,6 +102,9 @@ claude-poe models
 claude-poe-review --wrapper-help
 poe-external-review --help
 ```
+
+If you are validating the workspace path only, the first three commands are enough.
+If you are validating the packaged review path as well, include `poe-external-review --help`.
 
 ## Advanced Checks
 
