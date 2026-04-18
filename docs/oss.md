@@ -7,6 +7,7 @@ The current focus is the `Poe + Claude Code` line, with packaged `Poe External R
 ## Packaging Decision
 
 - the public repository should be framed around `Claude Code via Poe`
+- the repository should be presented as bridge/tooling first, with optional skill-facing packaging
 - the main public claim should be Claude-family local workspace access through Poe
 - direct Poe API review for Gemini or other non-Claude models should remain an auxiliary path
 - do not market the repository as "any Poe model in Claude Code" without an actual Anthropic-compatible adapter for non-Claude models
@@ -27,6 +28,11 @@ Current layout:
 - `docs/`
 - `examples/`
 - `skill/`
+
+Interpretation:
+
+- `bin/`, `scripts/`, `config/`, and `docs/` are the main public tool repository surface
+- `skill/` is optional packaging for agent-facing integration, not the primary repository identity
 
 ## Product Boundary
 

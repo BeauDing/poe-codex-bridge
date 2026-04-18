@@ -1,8 +1,8 @@
 # poe-codex-bridge
 
-Skill repository for using Claude Code through Poe on Claude-family models, with an auxiliary packaged-review path for Gemini or other non-Claude second opinions.
+Bridge tooling for running Claude Code through Poe on Claude-family models, with an auxiliary packaged-review path for Gemini or other non-Claude second opinions.
 
-## What This Skill Is For
+## What This Repository Is For
 
 This repository exposes two paths:
 
@@ -16,6 +16,9 @@ Use the packaged review path when a packaged second opinion is enough, or when t
 
 The workspace path is the main product claim.
 The packaged review path is useful, but it is not full Claude Code parity and does not provide live workspace access.
+
+This repository is primarily a local bridge and wrapper toolset.
+The [`skill/`](skill) directory is optional skill-facing packaging, not the main product surface.
 
 ## Quick Start
 
@@ -60,3 +63,4 @@ poe-external-review \
 - [Capability Matrix](docs/capability-matrix.md)
 - [Limitations](docs/limitations.md)
 - [Release Checklist](docs/release-checklist.md)
+- [OSS Plan](docs/oss.md)
