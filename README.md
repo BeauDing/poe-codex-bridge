@@ -59,6 +59,12 @@ If you are using Codex or another agent to install this repository, point it to 
 If you want an agent to perform the installation, give it this prompt:
 
 ```text
+Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
+```
+
+If the agent specifically needs the raw markdown instead of the GitHub file view, use:
+
+```text
 Fetch and follow instructions from https://raw.githubusercontent.com/BeauDing/poe-codex-bridge/refs/heads/main/docs/installation.md
 ```
 
