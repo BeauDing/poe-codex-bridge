@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-config_file="${CLAUDE_POE_ENV_FILE:-${HOME}/.config/claude-poe.env}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "$script_dir/.." && pwd)"
+runtime_env_sh="$repo_root/scripts/runtime_env.sh"
+
+if [[ ! -f "$runtime_env_sh" ]]; then
+  echo "claude-poe: missing runtime env helper at $runtime_env_sh" >&2
+  exit 2
+fi
+
+# shellcheck disable=SC1090
+source "$runtime_env_sh"
+
+config_file="$(claude_poe_get_runtime_env_path)"
 tested_models=(
   "claude-sonnet-4-6"
   "claude-haiku-4-5"
@@ -37,10 +49,7 @@ Notes:
 EOF
 }
 
-if [[ -f "$config_file" ]]; then
-  # shellcheck disable=SC1090
-  source "$config_file"
-fi
+claude_poe_load_runtime_env_defaults "$config_file"
 
 if [[ $# -eq 1 && ( "$1" == "models" || "$1" == "known-models" || "$1" == "--list-models" ) ]]; then
   printf '%s\n' "${tested_models[@]}"

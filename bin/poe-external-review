@@ -3,7 +3,17 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 script_path="$repo_root/scripts/send_and_summarize.py"
-config_file="${CLAUDE_POE_ENV_FILE:-${HOME}/.config/claude-poe.env}"
+runtime_env_sh="$repo_root/scripts/runtime_env.sh"
+
+if [[ ! -f "$runtime_env_sh" ]]; then
+  echo "poe-external-review: missing runtime env helper at $runtime_env_sh" >&2
+  exit 2
+fi
+
+# shellcheck disable=SC1090
+source "$runtime_env_sh"
+
+config_file="$(claude_poe_get_runtime_env_path)"
 
 if ! command -v python3 >/dev/null 2>&1; then
   echo "poe-external-review: python3 is not installed or not on PATH." >&2
@@ -15,10 +25,7 @@ if [[ ! -f "$script_path" ]]; then
   exit 2
 fi
 
-if [[ -f "$config_file" ]]; then
-  # shellcheck disable=SC1090
-  source "$config_file"
-fi
+claude_poe_load_runtime_env_defaults "$config_file"
 
 if [[ -n "${POE_API_KEY:-}" ]]; then
   export POE_API_KEY
