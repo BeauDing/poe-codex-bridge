@@ -2,73 +2,11 @@
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-local_wrapper="$script_dir/claude-poe"
-claude_poe_cmd="claude-poe"
+delegate="$script_dir/../extras/claude-workspace-bridge/bin/claude-poe-review"
 
-if [[ -x "$local_wrapper" ]]; then
-  claude_poe_cmd="$local_wrapper"
-elif ! command -v claude-poe >/dev/null 2>&1; then
-  echo "claude-poe-review: claude-poe is not installed or not on PATH." >&2
+if [[ ! -x "$delegate" ]]; then
+  echo "claude-poe-review: missing advanced bridge implementation at $delegate" >&2
   exit 127
 fi
 
-if [[ "${1:-}" == "--wrapper-help" ]]; then
-  cat <<'EOF'
-claude-poe-review: run a read-only external code review through Claude Code on Poe.
-
-Usage:
-  claude-poe-review
-  claude-poe-review "Focus on auth and permissions"
-  claude-poe-review --model claude-opus-4-6 "Stress test this diff"
-
-Behavior:
-  - Uses the current working directory as the review target.
-  - Defaults to the claude-poe default model unless --model is passed.
-  - Runs in non-interactive print mode and asks for findings first.
-EOF
-  exit 0
-fi
-
-extra_instruction=""
-args=()
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --model|--model=*)
-      args+=("$1")
-      if [[ "$1" == "--model" && $# -gt 1 ]]; then
-        shift
-        args+=("$1")
-      fi
-      ;;
-    *)
-      if [[ -n "$extra_instruction" ]]; then
-        extra_instruction+=" "
-      fi
-      extra_instruction+="$1"
-      ;;
-  esac
-  shift
-done
-
-read -r -d '' prompt <<EOF || true
-You are acting as a strict external code reviewer for the repository in the current working directory.
-
-Constraints:
-- Read-only review only. Do not modify files.
-- Inspect the current repository state and any relevant uncommitted changes.
-- Prioritize correctness bugs, security/privacy issues, hidden assumptions, brittle logic, and missing tests.
-- Findings must come first.
-- If no material findings are present, say that explicitly and then mention residual risks or testing gaps.
-
-Output format:
-1. Findings
-2. Open questions
-3. Short summary
-EOF
-
-if [[ -n "$extra_instruction" ]]; then
-  prompt+=$'\n\n'
-  prompt+="Additional review focus: $extra_instruction"
-fi
-
-exec "$claude_poe_cmd" -p --permission-mode plan "${args[@]}" "$prompt"
+exec "$delegate" "$@"

@@ -2,10 +2,10 @@
 set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-delegate="$script_dir/../extras/claude-workspace-bridge/bin/claude-poe"
+delegate="$script_dir/poe-external-review"
 
 if [[ ! -x "$delegate" ]]; then
-  echo "claude-poe: missing advanced bridge implementation at $delegate" >&2
+  echo "poe-review: poe-external-review is not installed or not executable." >&2
   exit 127
 fi
 

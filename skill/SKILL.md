@@ -1,38 +1,42 @@
 ---
 name: poe-codex-bridge
-description: Use Claude Code through Poe for Claude-family workspace access, or use the packaged direct Poe API path for non-Claude external review on selected local materials.
+description: Use Poe's API-first packaged review path on selected local materials, with an optional advanced Claude Code through Poe bridge when live workspace access is required.
 ---
 # poe-codex-bridge
 
-Use this skill when the task calls for either:
+Use this skill when the task calls for:
 
-- Claude-family review or coding work through Poe with live workspace access
-- a packaged second opinion through Poe on selected local files
+- a packaged external review through Poe on selected local files
+- an optional advanced Claude-family workspace review through Poe when live repo access is truly required
 
 ## When To Use It
 
-Use the workspace path when the model should inspect the current repository directly.
+Use the packaged review path by default.
 
-Use the packaged review path when:
+It is the right default when:
 
-- the user explicitly wants Gemini or another non-Claude model
+- the user wants Gemini or another non-Claude model
 - a packaged external critique is enough
 - live workspace access is not required
+- the task is rebuttal review, claim review, experiment critique, or decision cross-check
+
+Use the optional workspace path only when the model must inspect the current repository directly.
 
 ## Paths
 
-### Claude-family workspace path
+### Default packaged external review path
+
+Use:
+
+- `poe-review`
+- `poe-external-review`
+
+### Optional Claude-family workspace path
 
 Use:
 
 - `claude-poe`
 - `claude-poe-review`
-
-### Packaged external review path
-
-Use:
-
-- `poe-external-review`
 
 ## Core Rule
 
@@ -41,6 +45,8 @@ It is a packaged review path, not a live workspace agent path.
 
 ## Practical Guidance
 
-- prefer `claude-poe` as the general workspace entrypoint
-- prefer `claude-poe-review` when the task is specifically a read-only code review
-- prefer `poe-external-review` only when packaged review is acceptable or a non-Claude model is required
+- prefer `poe-review` as the general entrypoint
+- use `poe-external-review` when the explicit long-form command name is clearer
+- prefer exact model ids or alias routing for packaged review
+- prefer `claude-poe-review` only when the task is specifically a read-only workspace review
+- prefer `claude-poe` only when Claude Code style live inspection is required

@@ -15,6 +15,7 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 from runtime_env import (  # noqa: E402
     DEFAULT_POE_API_BASE_URL,
     get_poe_api_base_url,
+    get_runtime_env_path,
     load_runtime_env,
     parse_env_file,
 )
@@ -74,7 +75,35 @@ class RuntimeEnvTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {"POE_API_BASE_URL": "https://override.example/v1"}, clear=True):
             self.assertEqual(get_poe_api_base_url(), "https://override.example/v1")
 
+    def test_get_runtime_env_path_prefers_new_override_then_legacy_override(self) -> None:
+        with mock.patch.dict(os.environ, {"POE_REVIEW_ENV_FILE": "/tmp/poe-review.env"}, clear=True):
+            self.assertEqual(get_runtime_env_path(), Path("/tmp/poe-review.env"))
+
+        with mock.patch.dict(os.environ, {"CLAUDE_POE_ENV_FILE": "/tmp/claude-poe.env"}, clear=True):
+            self.assertEqual(get_runtime_env_path(), Path("/tmp/claude-poe.env"))
+
+    def test_get_runtime_env_path_prefers_new_default_file_and_falls_back_to_legacy(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            home = Path(tmpdir)
+            config_dir = home / ".config"
+            config_dir.mkdir()
+            preferred = config_dir / "poe-review.env"
+            legacy = config_dir / "claude-poe.env"
+
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with mock.patch("pathlib.Path.home", return_value=home):
+                    self.assertEqual(get_runtime_env_path(), preferred)
+
+            legacy.write_text("POE_API_KEY=legacy\n", encoding="utf-8")
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with mock.patch("pathlib.Path.home", return_value=home):
+                    self.assertEqual(get_runtime_env_path(), legacy)
+
+            preferred.write_text("POE_API_KEY=preferred\n", encoding="utf-8")
+            with mock.patch.dict(os.environ, {}, clear=True):
+                with mock.patch("pathlib.Path.home", return_value=home):
+                    self.assertEqual(get_runtime_env_path(), preferred)
+
 
 if __name__ == "__main__":
     unittest.main()
-

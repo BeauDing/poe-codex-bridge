@@ -1,10 +1,28 @@
 #!/usr/bin/env bash
 
 claude_poe_get_runtime_env_path() {
+  local preferred=""
+  local legacy=""
+
+  if [[ -n "${POE_REVIEW_ENV_FILE:-}" ]]; then
+    printf '%s\n' "$POE_REVIEW_ENV_FILE"
+    return 0
+  fi
+
   if [[ -n "${CLAUDE_POE_ENV_FILE:-}" ]]; then
     printf '%s\n' "$CLAUDE_POE_ENV_FILE"
+    return 0
+  fi
+
+  preferred="${HOME}/.config/poe-review.env"
+  legacy="${HOME}/.config/claude-poe.env"
+
+  if [[ -f "$preferred" ]]; then
+    printf '%s\n' "$preferred"
+  elif [[ -f "$legacy" ]]; then
+    printf '%s\n' "$legacy"
   else
-    printf '%s\n' "${HOME}/.config/claude-poe.env"
+    printf '%s\n' "$preferred"
   fi
 }
 

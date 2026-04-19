@@ -8,38 +8,26 @@ Repository file view:
 https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 ```
 
-## Prerequisites
+## Default Setup: API-First Packaged Review
 
-For the main Claude-family path:
-
-- `claude` installed and working
-- `poe-code` installed and working
-- a valid `POE_API_KEY`
-
-For the packaged external review path:
+### Prerequisites
 
 - `python3`
-- the `openai` Python package
+- the `openai` Python package from `requirements.txt`
 - a valid `POE_API_KEY`
 
-## Wrapper Setup
+### Wrapper Setup
 
-Make the shell entrypoints executable:
+Make the packaged-review entrypoint executable:
 
 ```bash
-chmod +x bin/claude-poe bin/claude-poe-review bin/poe-external-review
+chmod +x bin/poe-external-review bin/poe-review
 ```
 
 Then either:
 
 - add the repository `bin/` directory to `PATH`, or
-- symlink the three files into a directory already on `PATH`
-
-These three shell entrypoints are the supported public CLI surface:
-
-- `claude-poe`
-- `claude-poe-review`
-- `poe-external-review`
+- symlink `bin/poe-review` or `bin/poe-external-review` into a directory already on `PATH`
 
 Example:
 
@@ -47,39 +35,27 @@ Example:
 export PATH="/path/to/poe-codex-bridge/bin:$PATH"
 ```
 
-At this point the basic workspace wrappers are on `PATH`.
+### Credential Setup
 
-## Credential Setup
-
-Create `~/.config/claude-poe.env`:
+Create `~/.config/poe-review.env`:
 
 ```bash
 POE_API_KEY=your_poe_api_key
 POE_API_BASE_URL=https://api.poe.com/v1
-CLAUDE_POE_DEFAULT_MODEL=claude-sonnet-4-6
 ```
 
-The wrappers and the packaged `poe-external-review` entrypoint load this file automatically unless you override it with `CLAUDE_POE_ENV_FILE`.
-
-## Configuration Precedence
-
-Runtime configuration resolves in this order:
-
-1. environment variables already exported in the current shell
-2. `CLAUDE_POE_ENV_FILE`, if set
-3. the default file `~/.config/claude-poe.env`
-4. code-level defaults such as `claude-sonnet-4-6`
+The preferred runtime config file is `~/.config/poe-review.env`.
+For compatibility, the wrappers also check `~/.config/claude-poe.env`.
+For API-first packaged review, `CLAUDE_POE_DEFAULT_MODEL` is not required.
 
 You can start from:
 
 ```bash
 mkdir -p ~/.config
-cp config/claude-poe.env.example ~/.config/claude-poe.env
+cp config/poe-review.env.example ~/.config/poe-review.env
 ```
 
-If you only need the Claude-family workspace path, the setup can stop here.
-
-## Python Dependency
+### Python Dependency
 
 The packaged review helpers use the OpenAI SDK against Poe's OpenAI-compatible API:
 
@@ -87,9 +63,7 @@ The packaged review helpers use the OpenAI SDK against Poe's OpenAI-compatible A
 python3 -m pip install -r requirements.txt
 ```
 
-This is only required for the packaged `poe-external-review` path and the direct Poe API helpers.
-
-## Optional Config
+### Optional Alias Config
 
 Copy the example model aliases if you want alias-based routing:
 
@@ -99,22 +73,78 @@ cp config/model_aliases.example.json config/model_aliases.json
 
 Edit the copied file as needed.
 
-## First Smoke Tests
+### First Smoke Tests
+
+```bash
+poe-review --help
+```
+
+Recommended low-cost real request:
+
+```bash
+poe-review \
+  --model gemini-3-flash \
+  --mode decision-cross-check \
+  --current-reply examples/test-fixtures/reply.md \
+  --language English \
+  --max-output-tokens 1200
+```
+
+### Advanced Checks
+
+If you want to validate alias routing after credentials are configured:
+
+```bash
+python3 scripts/check_model_aliases.py
+```
+
+## Optional Advanced Setup: Claude Workspace Bridge
+
+Only use this path if you specifically need live workspace inspection through Claude Code.
+
+### Additional Prerequisites
+
+- `claude` installed and working
+- `poe-code` installed and working
+
+### Additional Wrapper Setup
+
+Make the bridge entrypoints executable:
+
+```bash
+chmod +x bin/claude-poe bin/claude-poe-review
+```
+
+They use the same runtime config file as the API-first path.
+If you want a default bridge model, add this optional line to `~/.config/poe-review.env`:
+
+```bash
+CLAUDE_POE_DEFAULT_MODEL=claude-sonnet-4-6
+```
+
+### Optional Advanced Smoke Tests
 
 ```bash
 claude-poe --wrapper-help
 claude-poe models
 claude-poe-review --wrapper-help
-poe-external-review --help
 ```
 
-If you are validating the workspace path only, the first three commands are enough.
-If you are validating the packaged review path as well, include `poe-external-review --help`.
-
-## Advanced Checks
-
-If you want to validate direct Poe model alias routing after credentials are configured:
+Recommended low-cost real request:
 
 ```bash
-python3 scripts/check_model_aliases.py
+claude-poe --model claude-haiku-4.5 -p "Reply with exactly: pong"
 ```
+
+For usage notes and boundaries, see [advanced-workspace-bridge.md](advanced-workspace-bridge.md).
+
+## Configuration Precedence
+
+Runtime configuration resolves in this order:
+
+1. environment variables already exported in the current shell
+2. `POE_REVIEW_ENV_FILE`, if set
+3. `CLAUDE_POE_ENV_FILE`, if set
+4. the preferred default file `~/.config/poe-review.env`
+5. the legacy default file `~/.config/claude-poe.env`
+6. code-level defaults such as `claude-sonnet-4-6`

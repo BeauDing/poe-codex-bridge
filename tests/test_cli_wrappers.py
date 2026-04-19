@@ -12,6 +12,114 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class CliWrapperTests(unittest.TestCase):
+    def test_poe_review_delegates_to_poe_external_review(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            fake_repo = tmp / "repo"
+            fake_repo.mkdir()
+            fake_bin_dir = fake_repo / "bin"
+            fake_bin_dir.mkdir()
+            captured_args = tmp / "captured-args.txt"
+
+            (fake_bin_dir / "poe-external-review").write_text(
+                textwrap.dedent(
+                    f"""\
+                    #!/usr/bin/env bash
+                    printf '%s\n' "$@" > "{captured_args}"
+                    exit 0
+                    """
+                ),
+                encoding="utf-8",
+            )
+            (fake_bin_dir / "poe-review").write_text(
+                textwrap.dedent(
+                    """\
+                    #!/usr/bin/env bash
+                    set -euo pipefail
+
+                    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+                    delegate="$script_dir/poe-external-review"
+
+                    if [[ ! -x "$delegate" ]]; then
+                      echo "poe-review: poe-external-review is not installed or not executable." >&2
+                      exit 127
+                    fi
+
+                    exec "$delegate" "$@"
+                    """
+                ),
+                encoding="utf-8",
+            )
+            os.chmod(fake_bin_dir / "poe-external-review", 0o755)
+            os.chmod(fake_bin_dir / "poe-review", 0o755)
+
+            result = subprocess.run(
+                [str(fake_bin_dir / "poe-review"), "--mode", "decision-cross-check", "--help"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stderr)
+            self.assertEqual(
+                captured_args.read_text(encoding="utf-8").splitlines(),
+                ["--mode", "decision-cross-check", "--help"],
+            )
+
+    def test_claude_poe_uses_new_default_env_filename_when_present(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            fake_bin = tmp / "bin"
+            fake_bin.mkdir()
+            output_file = tmp / "poe-code-args.txt"
+
+            (fake_bin / "claude").write_text(
+                "#!/usr/bin/env bash\nexit 0\n",
+                encoding="utf-8",
+            )
+            (fake_bin / "poe-code").write_text(
+                textwrap.dedent(
+                    f"""\
+                    #!/usr/bin/env bash
+                    printf '%s\n' "$@" > "{output_file}"
+                    exit 0
+                    """
+                ),
+                encoding="utf-8",
+            )
+            os.chmod(fake_bin / "claude", 0o755)
+            os.chmod(fake_bin / "poe-code", 0o755)
+
+            config_dir = tmp / ".config"
+            config_dir.mkdir()
+            env_file = config_dir / "poe-review.env"
+            env_file.write_text(
+                "\n".join(
+                    [
+                        "POE_API_KEY=test-key",
+                        "CLAUDE_POE_DEFAULT_MODEL=claude-haiku-4-5",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            env = os.environ.copy()
+            env["HOME"] = str(tmp)
+            env["PATH"] = f"{fake_bin}:{env['PATH']}"
+
+            result = subprocess.run(
+                [str(REPO_ROOT / "bin" / "claude-poe"), "-p", "hello"],
+                env=env,
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stderr)
+            captured_args = output_file.read_text(encoding="utf-8").splitlines()
+            self.assertEqual(captured_args[:4], ["wrap", "claude", "--", "--model"])
+            self.assertEqual(captured_args[4], "claude-haiku-4-5")
+
     def test_claude_poe_uses_default_model_from_env_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp = Path(tmpdir)

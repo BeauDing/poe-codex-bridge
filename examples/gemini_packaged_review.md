@@ -3,7 +3,7 @@
 Run a Gemini-based external review on packaged local materials:
 
 ```bash
-poe-external-review \
+poe-review \
   --model-alias balanced_alt \
   --mode rebuttal-review \
   --reviewer-comments examples/test-fixtures/review.md \
@@ -14,6 +14,7 @@ poe-external-review \
 
 This path does not expose the live workspace.
 It only sends the packaged inputs you select.
+`poe-external-review` remains available as the explicit long-form command.
 
 Typical response shape:
 
