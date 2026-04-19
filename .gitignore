@@ -11,3 +11,5 @@ config/model_aliases.json
 *.raw.md
 *.summary.md
 
+HANDOFF.md
+AGENTS.md
