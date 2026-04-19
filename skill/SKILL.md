@@ -29,7 +29,6 @@ Use the optional workspace path only when the model must inspect the current rep
 Use:
 
 - `poe-review`
-- `poe-external-review`
 
 ### Optional Claude-family workspace path
 
@@ -46,7 +45,6 @@ It is a packaged review path, not a live workspace agent path.
 ## Practical Guidance
 
 - prefer `poe-review` as the general entrypoint
-- use `poe-external-review` when the explicit long-form command name is clearer
 - prefer exact model ids or alias routing for packaged review
 - prefer `claude-poe-review` only when the task is specifically a read-only workspace review
 - prefer `claude-poe` only when Claude Code style live inspection is required

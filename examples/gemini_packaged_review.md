@@ -14,7 +14,6 @@ poe-review \
 
 This path does not expose the live workspace.
 It only sends the packaged inputs you select.
-`poe-external-review` remains available as the explicit long-form command.
 
 Typical response shape:
 

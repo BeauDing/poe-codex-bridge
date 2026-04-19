@@ -26,22 +26,24 @@ https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 
 ### Wrapper Setup
 
-Make the packaged-review entrypoints executable:
+Make the default packaged-review entrypoint executable:
 
 ```bash
-chmod +x bin/poe-external-review bin/poe-review
+chmod +x bin/poe-review
 ```
 
 Then either:
 
 - add the repository `bin/` directory to `PATH`, or
-- symlink `bin/poe-review` or `bin/poe-external-review` into a directory already on `PATH`
+- symlink `bin/poe-review` into a directory already on `PATH`
 
 Example:
 
 ```bash
 export PATH="/path/to/poe-codex-bridge/bin:$PATH"
 ```
+
+Treat `poe-review` as the normal packaged-review command. The longer internal wrapper name exists for implementation structure, not as the main user-facing command.
 
 ### Credential Setup
 

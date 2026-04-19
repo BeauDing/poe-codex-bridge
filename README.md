@@ -30,7 +30,7 @@ For the default API-first flow, the preferred runtime config file is `~/.config/
 If you prefer to do the setup manually instead of using the helper script:
 
 ```bash
-chmod +x bin/poe-external-review bin/poe-review
+chmod +x bin/poe-review
 export PATH="/path/to/poe-codex-bridge/bin:$PATH"
 python3 -m pip install -r requirements.txt
 mkdir -p ~/.config
@@ -66,7 +66,7 @@ The default packaged-review path supports:
 - use `--model auto` plus alias config for stable local routing
 - edit [config/model_aliases.example.json](config/model_aliases.example.json) and copy it to `config/model_aliases.json` if you want alias-based defaults
 
-`poe-review` is the short default command. `poe-external-review` remains the explicit underlying entrypoint.
+Use `poe-review` as the default packaged-review command.
 
 ## Optional Advanced Path
 
