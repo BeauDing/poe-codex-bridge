@@ -67,6 +67,12 @@ Command note:
 If you specifically need live workspace inspection through Claude Code, see [docs/advanced-workspace-bridge.md](docs/advanced-workspace-bridge.md).
 That path requires additional local tooling and is intentionally documented as advanced setup.
 
+## Repository Layout Note
+
+- top-level packaged-review commands and docs reflect the default API-first product surface
+- optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/)
+- short continuity notes for future sessions live in [HANDOFF.md](HANDOFF.md)
+
 ## More Details
 
 - [Installation](docs/installation.md)
