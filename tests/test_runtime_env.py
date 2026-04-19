@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -94,15 +95,68 @@ class RuntimeEnvTests(unittest.TestCase):
                 with mock.patch("pathlib.Path.home", return_value=home):
                     self.assertEqual(get_runtime_env_path(), preferred)
 
+    def test_shell_runtime_env_path_matches_python_logic(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            home = Path(tmpdir)
+            config_dir = home / ".config"
+            config_dir.mkdir()
+            legacy = config_dir / "claude-poe.env"
             legacy.write_text("POE_API_KEY=legacy\n", encoding="utf-8")
-            with mock.patch.dict(os.environ, {}, clear=True):
-                with mock.patch("pathlib.Path.home", return_value=home):
-                    self.assertEqual(get_runtime_env_path(), legacy)
 
-            preferred.write_text("POE_API_KEY=preferred\n", encoding="utf-8")
-            with mock.patch.dict(os.environ, {}, clear=True):
-                with mock.patch("pathlib.Path.home", return_value=home):
-                    self.assertEqual(get_runtime_env_path(), preferred)
+            command = f'''
+source "{SCRIPTS_DIR / "runtime_env.sh"}"
+claude_poe_get_runtime_env_path
+'''
+            result = subprocess.run(
+                ["bash", "-lc", command],
+                check=False,
+                capture_output=True,
+                text=True,
+                env={"HOME": str(home)},
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stderr)
+            self.assertEqual(result.stdout.strip(), str(legacy))
+
+    def test_shell_runtime_env_defaults_match_python_parser(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            env_file = Path(tmpdir) / "test.env"
+            env_file.write_text(
+                "\n".join(
+                    [
+                        "# comment",
+                        "POE_API_KEY=test-key",
+                        'POE_API_BASE_URL="https://proxy.example/v1"',
+                        "export CLAUDE_POE_DEFAULT_MODEL=claude-haiku-4-5",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            command = f'''
+source "{SCRIPTS_DIR / "runtime_env.sh"}"
+claude_poe_load_runtime_env_defaults "{env_file}"
+printf 'POE_API_KEY=%s\\n' "${{POE_API_KEY:-}}"
+printf 'POE_API_BASE_URL=%s\\n' "${{POE_API_BASE_URL:-}}"
+printf 'CLAUDE_POE_DEFAULT_MODEL=%s\\n' "${{CLAUDE_POE_DEFAULT_MODEL:-}}"
+'''
+            result = subprocess.run(
+                ["bash", "-lc", command],
+                check=False,
+                capture_output=True,
+                text=True,
+                env={"HOME": tmpdir},
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stderr)
+            self.assertEqual(
+                result.stdout.splitlines(),
+                [
+                    "POE_API_KEY=test-key",
+                    "POE_API_BASE_URL=https://proxy.example/v1",
+                    "CLAUDE_POE_DEFAULT_MODEL=claude-haiku-4-5",
+                ],
+            )
 
 
 if __name__ == "__main__":

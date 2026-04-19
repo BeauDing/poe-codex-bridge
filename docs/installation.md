@@ -12,6 +12,12 @@ https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 
 ## Default Setup: API-First Packaged Review
 
+### Fastest Path
+
+```bash
+./scripts/install.sh
+```
+
 ### Prerequisites
 
 - `python3`
@@ -20,7 +26,7 @@ https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 
 ### Wrapper Setup
 
-Make the packaged-review entrypoint executable:
+Make the packaged-review entrypoints executable:
 
 ```bash
 chmod +x bin/poe-external-review bin/poe-review
@@ -115,6 +121,12 @@ Make the bridge entrypoints executable:
 
 ```bash
 chmod +x bin/claude-poe bin/claude-poe-review
+```
+
+If you want the helper script to include those advanced wrappers during setup:
+
+```bash
+./scripts/install.sh --advanced-claude-bridge
 ```
 
 They use the same runtime config file as the API-first path.

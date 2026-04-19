@@ -42,7 +42,7 @@ Keep it brief. Update it at milestones, before `/clear`, or before stopping a lo
 - `docs/advanced-workspace-bridge.md` is the canonical place for Claude workspace bridge setup and limits.
 - `bin/claude-poe` and `bin/claude-poe-review` are compatibility entrypoints that delegate to `extras/claude-workspace-bridge/`.
 - `scripts/runtime_env.py` and `scripts/runtime_env.sh` now prefer `poe-review.env` and still accept legacy `claude-poe.env`.
-- The sibling `codex-skills` repository has been updated so the local `poe-external-review` skill matches this API-first positioning.
+- The sibling `codex-skills` repository has been updated so the local `poe-review` skill matches this API-first positioning.
 
 ## Verification
 - `python3 -m unittest tests/test_runtime_env.py`

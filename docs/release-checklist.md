@@ -8,6 +8,7 @@
 - confirm `config/poe-review.env.example` has no real credentials
 - confirm `config/claude-poe.env.example` has no real credentials
 - confirm `config/model_aliases.example.json` contains only safe example aliases
+- confirm `scripts/install.sh` still matches the documented quick-start path
 
 ## Core Functional Checks
 

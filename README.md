@@ -1,8 +1,8 @@
 # poe-codex-bridge
 
-This repository is for running review-style workflows through Poe.
+This repository is for agent-assisted research workflows built around [Poe](https://poe.com/).
 
-The default path is simple: package a few local files, send them to a Poe model, and get back a structured second opinion. That is the main product surface now, and it works well for rebuttal review, claim checking, experiment critique, and decision cross-checks.
+Its main purpose is to let Codex call LLMs available through Poe's API and use them as external reviewers. In practice, that means packaging a few local files, sending them to a Poe model, and getting back a structured second opinion that can help with rebuttal review, claim checking, experiment critique, and decision cross-checks.
 
 There is also an optional advanced path for running Claude Code through Poe on Claude-family models, but that is no longer the default setup or the main story of the repository.
 
@@ -13,23 +13,29 @@ If you want the smallest setup and the clearest behavior, start with the package
 Install the default packaged-review path:
 
 ```bash
-chmod +x bin/poe-external-review bin/poe-review
-export PATH="/path/to/poe-codex-bridge/bin:$PATH"
-python3 -m pip install -r requirements.txt
-mkdir -p ~/.config
-cp config/poe-review.env.example ~/.config/poe-review.env
+./scripts/install.sh
 ```
 
 Then run a low-cost packaged review:
 
 ```bash
-poe-review \
+./bin/poe-review \
   --model gemini-3-flash \
   --mode decision-cross-check \
   --current-reply examples/test-fixtures/reply.md
 ```
 
 For the default API-first flow, the preferred runtime config file is `~/.config/poe-review.env`. Only `POE_API_KEY` is required. `POE_API_BASE_URL` is optional. For compatibility, the wrappers still fall back to `~/.config/claude-poe.env`.
+
+If you prefer to do the setup manually instead of using the helper script:
+
+```bash
+chmod +x bin/poe-external-review bin/poe-review
+export PATH="/path/to/poe-codex-bridge/bin:$PATH"
+python3 -m pip install -r requirements.txt
+mkdir -p ~/.config
+cp config/poe-review.env.example ~/.config/poe-review.env
+```
 
 For a human reader, the README should be enough to understand what this repository is for and how to get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents. If you want an agent to install this repository, point it there directly instead of asking it to infer setup from the homepage. A good prompt is:
 
@@ -68,7 +74,7 @@ If you specifically need live workspace inspection through Claude Code, use the 
 
 ## Repository Layout Note
 
-The top-level commands and docs reflect the API-first packaged-review workflow. The optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/). Short continuity notes for future sessions live in [HANDOFF.md](HANDOFF.md).
+The top-level commands and docs reflect the API-first packaged-review workflow. The optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/).
 
 ## More Details
 

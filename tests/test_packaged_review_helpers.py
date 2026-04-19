@@ -136,6 +136,7 @@ class SummarizeResponseTests(unittest.TestCase):
             "explicit model",
         )
 
+        self.assertIn("# Poe Review Summary", summary)
         self.assertIn("- model: `gemini-3.1-pro`", summary)
         self.assertIn("## Verdict", summary)
         self.assertIn("证据基本够用", summary)
@@ -144,6 +145,33 @@ class SummarizeResponseTests(unittest.TestCase):
         self.assertIn("## Best Next Moves", summary)
         self.assertIn("更清楚引用已有结果", summary)
         self.assertIn("## Final Meta-Judgment", summary)
+
+
+class CreateTextResponseTests(unittest.TestCase):
+    def test_create_text_response_falls_back_when_responses_output_text_is_blank(self) -> None:
+        class _FakeResponses:
+            def create(self, **_: object) -> object:
+                return types.SimpleNamespace(output_text="")
+
+        class _FakeChatCompletions:
+            def create(self, **_: object) -> object:
+                return types.SimpleNamespace(
+                    choices=[types.SimpleNamespace(message=types.SimpleNamespace(content="pong"))]
+                )
+
+        fake_client = types.SimpleNamespace(
+            responses=_FakeResponses(),
+            chat=types.SimpleNamespace(completions=_FakeChatCompletions()),
+        )
+
+        text = send_and_summarize.create_text_response(
+            fake_client,
+            model="gemini-3-flash",
+            prompt="Reply with exactly: pong",
+            max_output_tokens=50,
+        )
+
+        self.assertEqual(text, "pong")
 
 
 if __name__ == "__main__":

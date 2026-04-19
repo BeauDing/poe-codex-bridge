@@ -51,7 +51,9 @@ def create_text_response(client: OpenAI, *, model: str, prompt: str, max_output_
             input=prompt,
             max_output_tokens=max_output_tokens,
         )
-        return response.output_text
+        text = response.output_text or ""
+        if text.strip():
+            return text
 
     response = client.chat.completions.create(
         model=model,
@@ -217,7 +219,7 @@ def summarize_response(text: str, model: str, mode: str, preset: str | None, mod
     )
 
     parts = [
-        f"# Poe External Review Summary",
+        f"# Poe Review Summary",
         f"- model: `{model}`",
         f"- model_source: {model_source}",
         f"- mode: `{mode}`",
@@ -279,6 +281,9 @@ def main() -> int:
         prompt=prompt,
         max_output_tokens=args.max_output_tokens,
     )
+    if not text.strip():
+        print("Poe returned an empty response.", file=sys.stderr)
+        return 1
 
     if args.raw_output_file:
         Path(args.raw_output_file).write_text(text, encoding="utf-8")
