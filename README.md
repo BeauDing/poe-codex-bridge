@@ -1,27 +1,16 @@
 # poe-codex-bridge
 
-API-first skill and wrapper tooling for packaged external review through Poe.
-The default path packages selected local materials, sends them to a Poe model, and returns a compact review summary.
+This repository is for running review-style workflows through Poe.
 
-An optional advanced path is also included for running Claude Code through Poe on Claude-family models, but that is not the default product surface.
+The default path is simple: package a few local files, send them to a Poe model, and get back a structured second opinion. That is the main product surface now, and it works well for rebuttal review, claim checking, experiment critique, and decision cross-checks.
 
-## What This Repository Is For
+There is also an optional advanced path for running Claude Code through Poe on Claude-family models, but that is no longer the default setup or the main story of the repository.
 
-Primary path:
-
-- packaged external review on selected local files
-- exact-model or alias-based routing through Poe's OpenAI-compatible API
-- structured review modes for rebuttals, claim checks, experiment critique, and decision cross-checks
-
-Optional advanced path:
-
-- Claude Code workspace access through Poe for Claude-family models only
-
-If you want the smallest setup and the clearest boundary, use the packaged review path.
+If you want the smallest setup and the clearest behavior, start with the packaged review path.
 
 ## Quick Start
 
-Install the default API-first path:
+Install the default packaged-review path:
 
 ```bash
 chmod +x bin/poe-external-review bin/poe-review
@@ -40,9 +29,29 @@ poe-review \
   --current-reply examples/test-fixtures/reply.md
 ```
 
-The preferred runtime config file is now `~/.config/poe-review.env`.
-For compatibility, the wrappers still fall back to `~/.config/claude-poe.env`.
-For API-first use, only `POE_API_KEY` and optionally `POE_API_BASE_URL` matter.
+For the default API-first flow, the preferred runtime config file is `~/.config/poe-review.env`. Only `POE_API_KEY` is required. `POE_API_BASE_URL` is optional. For compatibility, the wrappers still fall back to `~/.config/claude-poe.env`.
+
+For a human reader, the README should be enough to understand what this repository is for and how to get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents.
+
+## If You Want An Agent To Install It
+
+The README is intentionally human-oriented. For agent-driven installation, point the agent directly at [docs/installation.md](docs/installation.md) instead of asking it to infer setup from the homepage.
+
+A good prompt is:
+
+```text
+Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
+```
+
+## What You Can Use It For
+
+The default packaged-review path supports:
+
+- rebuttal review
+- paper claim review
+- experiment critique
+- decision cross-checks
+- exact model ids or alias-based routing through Poe's OpenAI-compatible API
 
 ## Main Review Modes
 
@@ -57,21 +66,15 @@ For API-first use, only `POE_API_KEY` and optionally `POE_API_BASE_URL` matter.
 - use `--model auto` plus alias config for stable local routing
 - edit [config/model_aliases.example.json](config/model_aliases.example.json) and copy it to `config/model_aliases.json` if you want alias-based defaults
 
-Command note:
-
-- `poe-review` is the short default alias
-- `poe-external-review` remains the underlying explicit entrypoint
+`poe-review` is the short default command. `poe-external-review` remains the explicit underlying entrypoint.
 
 ## Optional Advanced Path
 
-If you specifically need live workspace inspection through Claude Code, see [docs/advanced-workspace-bridge.md](docs/advanced-workspace-bridge.md).
-That path requires additional local tooling and is intentionally documented as advanced setup.
+If you specifically need live workspace inspection through Claude Code, use the advanced path described in [docs/advanced-workspace-bridge.md](docs/advanced-workspace-bridge.md). That path requires extra local tooling and is intentionally documented separately so the default setup stays simple.
 
 ## Repository Layout Note
 
-- top-level packaged-review commands and docs reflect the default API-first product surface
-- optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/)
-- short continuity notes for future sessions live in [HANDOFF.md](HANDOFF.md)
+The top-level commands and docs reflect the API-first packaged-review workflow. The optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/). Short continuity notes for future sessions live in [HANDOFF.md](HANDOFF.md).
 
 ## More Details
 

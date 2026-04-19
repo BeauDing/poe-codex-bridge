@@ -1,6 +1,8 @@
 # Installation
 
-This document is the full setup reference for both manual installation and agent-assisted installation.
+This document is the agent-oriented setup reference.
+Humans should usually start with the repository `README.md` and use this file only when they want the full step-by-step setup details.
+
 If a Codex session or another agent is asked to install this repository, point it here.
 Repository file view:
 
