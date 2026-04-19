@@ -31,13 +31,7 @@ poe-review \
 
 For the default API-first flow, the preferred runtime config file is `~/.config/poe-review.env`. Only `POE_API_KEY` is required. `POE_API_BASE_URL` is optional. For compatibility, the wrappers still fall back to `~/.config/claude-poe.env`.
 
-For a human reader, the README should be enough to understand what this repository is for and how to get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents.
-
-## If You Want An Agent To Install It
-
-The README is intentionally human-oriented. For agent-driven installation, point the agent directly at [docs/installation.md](docs/installation.md) instead of asking it to infer setup from the homepage.
-
-A good prompt is:
+For a human reader, the README should be enough to understand what this repository is for and how to get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents. If you want an agent to install this repository, point it there directly instead of asking it to infer setup from the homepage. A good prompt is:
 
 ```text
 Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
