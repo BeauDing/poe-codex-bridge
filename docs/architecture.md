@@ -56,7 +56,7 @@ Properties:
 Use the primary packaged external review path when you want:
 
 - the smallest setup
-- Gemini or another non-Claude model
+- any Poe model through the API-first packaged path
 - review on selected local text, notes, rebuttals, or evidence packages
 - a clear external-review boundary without workspace access
 
@@ -85,7 +85,7 @@ It is more capable for workspace inspection, but it is also more complex to inst
 
 This repository does not currently provide:
 
-- full Claude Code parity for non-Claude models
+- full Claude Code parity through the packaged API path
 - an adapter that translates arbitrary Poe models into a stable Claude Code backend
 
 ## Security Notes
