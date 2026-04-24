@@ -55,8 +55,6 @@ POE_API_BASE_URL=https://api.poe.com/v1
 ```
 
 The preferred runtime config file is `~/.config/poe-review.env`.
-For compatibility, the wrappers also check `~/.config/claude-poe.env`.
-For API-first packaged review, `CLAUDE_POE_DEFAULT_MODEL` is not required.
 
 You can start from:
 
@@ -108,59 +106,10 @@ If you want to validate alias routing after credentials are configured:
 python3 scripts/check_model_aliases.py
 ```
 
-## Optional Advanced Setup: Claude Workspace Bridge
-
-Only use this path if you specifically need live workspace inspection through Claude Code.
-
-### Additional Prerequisites
-
-- `claude` installed and working
-- `poe-code` installed and working
-
-### Additional Wrapper Setup
-
-Make the bridge entrypoints executable:
-
-```bash
-chmod +x bin/claude-poe bin/claude-poe-review
-```
-
-If you want the helper script to include those advanced wrappers during setup:
-
-```bash
-./scripts/install.sh --advanced-claude-bridge
-```
-
-They use the same runtime config file as the API-first path.
-If you want a default bridge model, add this optional line to `~/.config/poe-review.env`:
-
-```bash
-CLAUDE_POE_DEFAULT_MODEL=claude-sonnet-4-6
-```
-
-### Optional Advanced Smoke Tests
-
-```bash
-claude-poe --wrapper-help
-claude-poe models
-claude-poe-review --wrapper-help
-```
-
-Recommended low-cost real request:
-
-```bash
-claude-poe --model claude-haiku-4.5 -p "Reply with exactly: pong"
-```
-
-For usage notes and boundaries, see [advanced-workspace-bridge.md](advanced-workspace-bridge.md).
-
 ## Configuration Precedence
 
 Runtime configuration resolves in this order:
 
 1. environment variables already exported in the current shell
 2. `POE_REVIEW_ENV_FILE`, if set
-3. `CLAUDE_POE_ENV_FILE`, if set
-4. the preferred default file `~/.config/poe-review.env`
-5. the legacy default file `~/.config/claude-poe.env`
-6. code-level defaults such as `claude-sonnet-4-6`
+3. the preferred default file `~/.config/poe-review.env`

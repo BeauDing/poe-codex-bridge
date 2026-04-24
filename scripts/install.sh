@@ -4,8 +4,6 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 config_dir="${HOME}/.config"
 config_file="${config_dir}/poe-review.env"
-legacy_config_file="${config_dir}/claude-poe.env"
-install_advanced_bridge=0
 skip_python_deps=0
 
 usage() {
@@ -14,13 +12,11 @@ install.sh: lightweight setup helper for poe-codex-bridge.
 
 Usage:
   ./scripts/install.sh
-  ./scripts/install.sh --advanced-claude-bridge
   ./scripts/install.sh --skip-python-deps
   ./scripts/install.sh --help
 
 Behavior:
   - marks the default packaged-review entrypoints executable
-  - optionally marks the advanced Claude bridge wrappers executable
   - installs Python dependencies unless --skip-python-deps is used
   - creates ~/.config/poe-review.env from the example if neither the new nor legacy config exists
   - prints the PATH line to add manually
@@ -29,10 +25,6 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --advanced-claude-bridge)
-      install_advanced_bridge=1
-      shift
-      ;;
     --skip-python-deps)
       skip_python_deps=1
       shift
@@ -51,10 +43,6 @@ done
 
 chmod +x "$repo_root/bin/poe-review" "$repo_root/bin/poe-external-review"
 
-if [[ $install_advanced_bridge -eq 1 ]]; then
-  chmod +x "$repo_root/bin/claude-poe" "$repo_root/bin/claude-poe-review"
-fi
-
 if [[ $skip_python_deps -eq 0 ]]; then
   if ! command -v python3 >/dev/null 2>&1; then
     echo "install.sh: python3 is required to install packaged-review dependencies." >&2
@@ -68,7 +56,7 @@ if [[ $skip_python_deps -eq 0 ]]; then
 fi
 
 mkdir -p "$config_dir"
-if [[ ! -f "$config_file" && ! -f "$legacy_config_file" ]]; then
+if [[ ! -f "$config_file" ]]; then
   cp "$repo_root/config/poe-review.env.example" "$config_file"
 fi
 

@@ -79,8 +79,8 @@ class ResolveModelTests(unittest.TestCase):
             config_path.write_text(
                 json.dumps(
                     {
-                        "balanced": "claude-sonnet-4.6",
-                        "balanced_alt": "gemini-3.1-pro",
+                        "balanced": "gemini-3.1-pro",
+                        "balanced_alt": "gemini-3-flash",
                     }
                 ),
                 encoding="utf-8",
@@ -94,7 +94,7 @@ class ResolveModelTests(unittest.TestCase):
                 str(config_path),
             )
 
-        self.assertEqual(model, "claude-sonnet-4.6")
+        self.assertEqual(model, "gemini-3.1-pro")
         self.assertEqual(source, "alias `balanced`")
 
     def test_resolve_model_errors_when_alias_is_missing(self) -> None:

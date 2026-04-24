@@ -9,22 +9,15 @@ from pathlib import Path
 
 DEFAULT_POE_API_BASE_URL = "https://api.poe.com/v1"
 DEFAULT_RUNTIME_ENV_BASENAME = "poe-review.env"
-LEGACY_RUNTIME_ENV_BASENAME = "claude-poe.env"
 
 
 def get_runtime_env_path() -> Path:
-    override = os.environ.get("POE_REVIEW_ENV_FILE") or os.environ.get("CLAUDE_POE_ENV_FILE")
+    override = os.environ.get("POE_REVIEW_ENV_FILE")
     if override:
         return Path(override).expanduser()
 
     config_dir = Path.home() / ".config"
-    preferred = config_dir / DEFAULT_RUNTIME_ENV_BASENAME
-    legacy = config_dir / LEGACY_RUNTIME_ENV_BASENAME
-    if preferred.exists():
-        return preferred
-    if legacy.exists():
-        return legacy
-    return preferred
+    return config_dir / DEFAULT_RUNTIME_ENV_BASENAME
 
 
 def parse_env_file(path: Path) -> dict[str, str]:

@@ -1,12 +1,15 @@
 # poe-codex-bridge
 
-This repository is for agent-assisted research workflows built around [Poe](https://poe.com/).
+`poe-codex-bridge` is a small API-first tool for running external reviews through [Poe](https://poe.com/).
 
-Its main purpose is to let Codex call LLMs available through Poe's API and use them as external reviewers. In practice, that means packaging a few local files, sending them to a Poe model, and getting back a structured second opinion that can help with rebuttal review, claim checking, experiment critique, and decision cross-checks.
+It lets Codex package a focused set of local materials, send them to a Poe model, and get back a structured second opinion for rebuttal review, claim checking, experiment critique, and decision cross-checks.
 
-There is also an optional advanced path for running Claude Code through Poe on Claude-family models, but that is no longer the default setup or the main story of the repository.
+The repository intentionally stays on one path only:
 
-If you want the smallest setup and the clearest behavior, start with the packaged review path.
+- packaged local context
+- Poe's OpenAI-compatible API
+- no live workspace inspection
+- no remote execution
 
 ## Quick Start
 
@@ -25,7 +28,14 @@ Then run a low-cost packaged review:
   --current-reply examples/test-fixtures/reply.md
 ```
 
-For the default API-first flow, the preferred runtime config file is `~/.config/poe-review.env`. Only `POE_API_KEY` is required. `POE_API_BASE_URL` is optional. For compatibility, the wrappers still fall back to `~/.config/claude-poe.env`.
+Create `~/.config/poe-review.env` with:
+
+```bash
+POE_API_KEY=your_poe_api_key
+POE_API_BASE_URL=https://api.poe.com/v1
+```
+
+Only `POE_API_KEY` is required. `POE_API_BASE_URL` is optional.
 
 If you prefer to do the setup manually instead of using the helper script:
 
@@ -37,7 +47,7 @@ mkdir -p ~/.config
 cp config/poe-review.env.example ~/.config/poe-review.env
 ```
 
-For a human reader, the README should be enough to understand what this repository is for and how to get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents. If you want an agent to install this repository, point it there directly instead of asking it to infer setup from the homepage. A good prompt is:
+For a human reader, this README should be enough to understand the tool and get started. The full [docs/installation.md](docs/installation.md) file is mainly there as a step-by-step setup reference for Codex or other agents. If you want an agent to install this repository, point it there directly instead of asking it to infer setup from the homepage. A good prompt is:
 
 ```text
 Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
@@ -45,7 +55,7 @@ Open and follow instructions from https://github.com/BeauDing/poe-codex-bridge/b
 
 ## What You Can Use It For
 
-The default packaged-review path supports:
+This packaged-review path supports:
 
 - rebuttal review
 - paper claim review
@@ -68,18 +78,19 @@ The default packaged-review path supports:
 
 Use `poe-review` as the default packaged-review command.
 
-## Optional Advanced Path
+## Why It Exists
 
-If you specifically need live workspace inspection through Claude Code, use the advanced path described in [docs/advanced-workspace-bridge.md](docs/advanced-workspace-bridge.md). That path requires extra local tooling and is intentionally documented separately so the default setup stays simple.
+- keep Codex as the primary worker
+- add an external reviewer without giving it live repo access
+- make Poe model choice explicit and reproducible
+- keep the public surface small enough to install and reason about quickly
 
 ## Repository Layout Note
 
-The top-level commands and docs reflect the API-first packaged-review workflow. The optional Claude workspace bridge implementation lives under [`extras/claude-workspace-bridge/`](extras/claude-workspace-bridge/).
+The top-level commands and docs all reflect the same API-first packaged-review workflow. This repository is meant to stay small, explicit, and safe for open-source release.
 
 ## More Details
 
 - [Installation](docs/installation.md)
 - [Architecture](docs/architecture.md)
-- [Advanced Workspace Bridge](docs/advanced-workspace-bridge.md)
 - [Gemini Packaged Review Example](examples/gemini_packaged_review.md)
-- [Advanced Claude Workspace Review Example](examples/claude_workspace_review.md)

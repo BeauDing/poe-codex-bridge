@@ -1,6 +1,6 @@
 {
-  "deep": "claude-opus-4.6",
-  "balanced": "claude-sonnet-4.6",
-  "balanced_alt": "gemini-3.1-pro",
+  "deep": "gemini-3.1-pro",
+  "balanced": "gemini-3.1-pro",
+  "balanced_alt": "gemini-3-flash",
   "fast": "gemini-3-flash"
 }
