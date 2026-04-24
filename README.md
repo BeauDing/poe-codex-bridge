@@ -58,12 +58,12 @@ poe-review \
 
 ## Skill Note
 
-If you use Codex skills, this repository is the runtime bridge, not the main skill library.
+If you use Codex skills, this repository is the runtime bridge, not the skill library itself.
 
-The corresponding Poe review skill lives in the sibling `codex-skills` repository. In normal use:
+In normal use:
 
 - install this repo so `poe-review` is available
-- install or sync the `poe-review` skill from your skill repo
+- install or sync your Poe review skill separately
 
 ## Model Selection
 

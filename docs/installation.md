@@ -3,12 +3,7 @@
 This document is the agent-oriented setup reference.
 Humans should usually start with the repository `README.md` and use this file only when they want the full step-by-step setup details.
 
-If a Codex session or another agent is asked to install this repository, point it here.
-Repository file view:
-
-```text
-https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
-```
+If a Codex session or another agent is asked to install this repository, point it to this file directly.
 
 ## Default Setup: API-First Packaged Review
 
@@ -21,7 +16,7 @@ https://github.com/BeauDing/poe-codex-bridge/blob/main/docs/installation.md
 ### Prerequisites
 
 - `python3`
-- the `openai` Python package from `requirements.txt`
+- Python dependencies from `requirements.txt`
 - a valid `POE_API_KEY`
 
 ### Wrapper Setup
@@ -65,7 +60,7 @@ cp config/poe-review.env.example ~/.config/poe-review.env
 
 ### Python Dependency
 
-The packaged review helpers use the OpenAI SDK against Poe's OpenAI-compatible API:
+Install the required Python dependencies:
 
 ```bash
 python3 -m pip install -r requirements.txt
