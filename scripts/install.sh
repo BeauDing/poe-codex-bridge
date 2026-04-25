@@ -18,7 +18,7 @@ Usage:
 Behavior:
   - marks the default packaged-review entrypoints executable
   - installs Python dependencies unless --skip-python-deps is used
-  - creates ~/.config/poe-review.env from the example if neither the new nor legacy config exists
+  - creates ~/.config/poe-review.env from the example if it does not already exist
   - prints the PATH line to add manually
 EOF
 }

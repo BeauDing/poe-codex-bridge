@@ -4,6 +4,7 @@
 
 - confirm no local usernames, machine-specific paths, or private excerpts remain
 - confirm `README.md` presents packaged Poe review as the default path
+- confirm the GitHub repository description matches the packaged-review-only scope
 - confirm `LICENSE` matches the intended public license
 - confirm `config/poe-review.env.example` has no real credentials
 - confirm `config/model_aliases.example.json` contains only safe example aliases
